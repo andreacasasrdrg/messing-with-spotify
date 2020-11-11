@@ -3,31 +3,43 @@ import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import { getParamValues } from '../../api/request'
 import { spotifyApi } from '../../api/spotifyApi'
+import { geniusApi } from "../../api/geniusApi";
 
 const Dashboard = (props) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [tracks, setTracks] = useState([])
 
     useEffect(() => {
-        const { setExpiryTime, history, location } = props;
+        const { history, location } = props;
         try {
-            const access_token = getParamValues(location.hash);
-            const expiryTime = new Date().getTime() + access_token.expires_in * 1000;
-            localStorage.setItem('params', JSON.stringify(access_token));
-            localStorage.setItem('expiry_time', expiryTime);
+            const spotify_access_token = getParamValues(location.hash);
+            const spotify_expiryTime = new Date().getTime() + spotify_access_token.expires_in * 1000;
+            localStorage.setItem('spotifyToken', JSON.stringify(spotify_access_token));
+            localStorage.setItem('expiry_time', spotify_expiryTime);
             setIsLoading(false)
         } catch (error) {
             history.push('/');
         }
-    }, [])
+    }, [props])
 
     const callHandler = React.useCallback(async () => {
+        setIsLoading(true)
         try {
-            const response = await spotifyApi.topArtists("tracks")
-            console.log(response.data)
+            const firstRes = await spotifyApi.searchSongs()
+            const secondRes = await spotifyApi.topTracks()
+            const tresRes = await geniusApi.search()
+
+            console.log(firstRes.data)
+            console.log(secondRes.data)
+            console.log(tresRes)
+            setIsLoading(false)
         } catch (error) {
-            console.log(error.response)
+            console.log(error)
+            setIsLoading(false)
         }
     }, [])
+
+
 
     if (isLoading) {
         return <p>IS LOADING</p>
@@ -45,6 +57,7 @@ const Dashboard = (props) => {
         <div className="dashboard">
             This is Dashboard
             <button onClick={callHandler}>API Call</button>
+
         </div>
     );
 }

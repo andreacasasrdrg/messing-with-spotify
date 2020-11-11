@@ -2,28 +2,23 @@ import axios from "axios"
 /* import { store } from "../store" */
 
 
-const axiosInstance = axios.create({
+const spotifyInstance = axios.create({
     baseURL: "https://api.spotify.com/v1"
 })
-
-axiosInstance.interceptors.request.use(config => {
+spotifyInstance.interceptors.request.use(config => {
     //if the url is part of amazonaws, token is not sended.
-    const params = JSON.parse(localStorage.getItem('params'));
+    const params = JSON.parse(localStorage.getItem('spotifyToken'));
     if (params) {
         config.headers['Authorization'] = `Bearer ${params.access_token}`
     }
     return config;
 })
 
-export const getParamValues = (url) => {
-    /* 
-        result body = {
-            access_token: some_value,
-            token_type: some_value,
-            expires_in: some_value
-        } 
-    */
+const geniusInstance = axios.create({
+    baseURL: "https://api.genius.com"
+})
 
+export const getParamValues = (url) => {
     return url
         .slice(1)
         .split('&')
@@ -34,10 +29,22 @@ export const getParamValues = (url) => {
         }, {});
 };
 
-export const request = (method, url, options) => {
+export const spotifyRequest = (method, url, options) => {
     const headers = createContentType(options)
 
-    return axiosInstance.request({
+    return spotifyInstance.request({
+        method,
+        url,
+        headers,
+        params: options.params || null,
+        data: createBody(options, headers),
+    })
+}
+
+export const geniusRequest = (method, url, options) => {
+    const headers = createContentType(options)
+console.log(process.env.REACT_APP_GENIUS_TOKEN)
+    return geniusInstance.request({
         method,
         url,
         headers,

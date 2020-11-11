@@ -3,7 +3,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import { Layout, LayoutPublic } from "./components/Layout/Layout";
 import Dashboard from "./views/Dashboard/Dashboard";
-import Login from "./views/Login/Login";
+import Landing from "./views/Landing/Landing";
 
 // styles
 import "./App.css";
@@ -48,7 +48,7 @@ const App = () => {
       <div id="app" className="d-flex flex-column h-100">
         <div className="flex-grow-1">
           <Switch>
-            <RouteWrapper path="/" exact component={Login} access={"public"} layout={LayoutPublic} />
+            <RouteWrapper path="/" exact component={Landing} access={"public"} layout={LayoutPublic} />
             <RouteWrapper path="/dashboard" exact component={Dashboard} access={"private"} layout={Layout} />
           </Switch>
         </div>
