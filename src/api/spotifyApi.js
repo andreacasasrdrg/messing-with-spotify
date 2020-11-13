@@ -11,8 +11,25 @@ export const spotifyApi = {
         `/me/top/tracks`
     ),
 
-    searchSongs: () => sApi.get(
-         `/search`, { q: "name=candy", type: "track" } 
+    searchSongs: (q) => sApi.get(
+        `/search`, { q, type: "track" }
+    ),
+
+    getUserPlaylists: (username) => sApi.get(
+        `/users/${username}/playlists/`
+    ),
+
+    getPlaylist: (username, playlist_id) => sApi.get(
+        `/users/${username}/playlists/${playlist_id}/tracks`
+    ),
+
+    getRecommendations: (seeds) => sApi.get(
+        `/recommendations`, 
+        {
+            seed_artists: seeds.artists,
+            seed_genres: seeds.genres,
+            seed_tracks: seeds.tracks,
+        }
     ),
 
 }
