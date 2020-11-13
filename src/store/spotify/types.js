@@ -1,0 +1,6 @@
+export const START_LOADING = '@spotify/START_LOADING'
+export const FINISH_LOADING = '@spotify/FINISH_LOADING'
+export const SET_USER_TRACKS = '@spotify/SET_USER_TRACKS'
+export const SET_USER_ARTISTS = '@spotify/SET_USER_ARTISTS'
+export const SET_ERROR = '@spotify/SET_ERROR'
+export const CLEAR_ERROR = '@spotify/CLEAR_ERROR'
