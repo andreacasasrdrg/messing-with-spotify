@@ -9,11 +9,9 @@ const Layout = (props) => {
     const [isLoading, setIsLoading] = useState(true);
 
     if (isLoading) {
-        console.log("is loading")
     }
 
     if (isError) {
-        console.log("is Error")
     } */
 
     return (

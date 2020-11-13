@@ -43,7 +43,6 @@ export const spotifyRequest = (method, url, options) => {
 
 export const geniusRequest = (method, url, options) => {
     const headers = createContentType(options)
-console.log(process.env.REACT_APP_GENIUS_TOKEN)
     return geniusInstance.request({
         method,
         url,

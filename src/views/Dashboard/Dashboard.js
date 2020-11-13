@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 
-import "./Dashboard.css";
 import { getParamValues } from '../../api/request'
 import { spotifyApi } from '../../api/spotifyApi'
 import { geniusApi } from "../../api/geniusApi";
 
+import { initUser } from "../../store/spotify";
+
+import { BTS_USERNAME, BTS_PLAYLISTS } from "../../utils/constants"
+
+import "./Dashboard.css";
+
+
 const Dashboard = (props) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [tracks, setTracks] = useState([])
+    const dispatch = useDispatch();
+    const { isLoading } = useSelector(state => state.spotify);
 
     useEffect(() => {
         const { history, location } = props;
@@ -16,30 +23,18 @@ const Dashboard = (props) => {
             const spotify_expiryTime = new Date().getTime() + spotify_access_token.expires_in * 1000;
             localStorage.setItem('spotifyToken', JSON.stringify(spotify_access_token));
             localStorage.setItem('expiry_time', spotify_expiryTime);
-            setIsLoading(false)
+            dispatch(initUser());
         } catch (error) {
             history.push('/');
         }
-    }, [props])
+    }, [props, dispatch])
 
     const callHandler = React.useCallback(async () => {
-        setIsLoading(true)
         try {
-            const firstRes = await spotifyApi.searchSongs()
-            const secondRes = await spotifyApi.topTracks()
-            const tresRes = await geniusApi.search()
-
-            console.log(firstRes.data)
-            console.log(secondRes.data)
-            console.log(tresRes)
-            setIsLoading(false)
+            const firstRes = await spotifyApi.getPlaylist(BTS_USERNAME, BTS_PLAYLISTS.RM.ID)
         } catch (error) {
-            console.log(error)
-            setIsLoading(false)
         }
     }, [])
-
-
 
     if (isLoading) {
         return <p>IS LOADING</p>
@@ -50,7 +45,6 @@ const Dashboard = (props) => {
     
 
     if (isError) {
-        console.log("is Error")
     } */
 
     return (
